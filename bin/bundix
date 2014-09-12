@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+
+require 'bundix/cli'
+Bundix::CLI.start(ARGV, debug: true)
