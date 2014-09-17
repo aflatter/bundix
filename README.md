@@ -28,6 +28,37 @@ Gem handling etc. will now be handled by Nix.
    `nix-shell /path/to/bundix/repo --shell 'bundix expr'`
 3. Load the definition using `nixpkgs.loadRubyEnv ./.bundix/definition.nix {}`.
 
+Example:
+
+```
+let
+  pkgs = import <nixpkgs> {};
+  stdenv = pkgs.stdenv;
+  ruby = pkgs.ruby21;
+  rubyLibs = pkgs.ruby21Libs;
+  buildRubyGem = rubyLibs.buildRubyGem;
+
+  rubyEnv = pkgs.loadRubyEnv ./.bundix/definition.nix {
+    inherit ruby;
+  };
+
+in with pkgs; rec {
+  inherit rubyEnv;
+
+  test = stdenv.mkDerivation rec {
+    name = "test";
+    builder = ./builder.sh;
+    buildInputs = [ rubyEnv.ruby ];
+    
+    src = ./.;
+
+    shellHook = ''
+      export GEM_PATH=${lib.concatStringsSep ":" rubyEnv.gemPath}
+    '';
+  };
+}
+```
+
 
 ### Known issues
 
