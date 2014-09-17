@@ -30,6 +30,7 @@ __END__
         url = "<%= gem.source.url %>";
         <%- if gem.source.type == 'git' -%>
         rev = "<%= gem.source.revision %>";
+        leaveDotGit = true;
         <%- end -%>
         sha256 = "<%= gem.source.sha256 %>";
       };

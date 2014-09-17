@@ -6,7 +6,7 @@ module Bundix::Prefetcher::Wrapper
 
   def git(repo, rev)
     # nix-prefetch-git returns a full sha25 hash
-    base16 = exec("nix-prefetch-git #{repo} #{rev} --hash sha256")
+    base16 = exec("nix-prefetch-git #{repo} #{rev} --hash sha256 --leave-dotGit")
     assert_length!(base16, 64)
     assert_format!(base16, /^[a-f0-9]+$/)
 
