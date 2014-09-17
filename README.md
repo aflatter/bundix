@@ -67,3 +67,5 @@ in with pkgs; rec {
 - `path` sources are not supported.
 - The ruby version specified by your Gemfile is read but not used yet.
   Pass `{ ruby = yourRuby; }` to `loadRubyEnv` instead.
+- `Bundler.setup` and friends still have to be stubbed out to do nothing.
+- There's no support for gem groups yet. All gems are installed.
