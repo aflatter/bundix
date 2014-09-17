@@ -30,7 +30,7 @@ class Bundix::Prefetcher::Cache
       acc[component] ||= Hash.new
     end
 
-    hash[last] = source.checksum
+    hash[last] = source.sha256
   end
 
   # @param [Pathname] path
