@@ -37,17 +37,4 @@ class Bundix::Prefetcher::Cache
   def write(path)
     path.open('w') { |file| file.write(YAML.dump(@cache)) }
   end
-
-  protected
-
-  def identifier(spec)
-    source = spec.source
-    components = case source
-    when Bundler::Source::Git then [source.uri, source.revision]
-    when Bundler::Source::Rubygems then
-      [File.join(source.remotes.first.to_s, 'downloads', "#{spec.name}-#{spec.version}.gem")]
-    end
-
-    components.join('#')
-  end
 end
