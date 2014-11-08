@@ -6,7 +6,7 @@ class Bundix::Manifest
 
   def initialize(ruby_version, gems)
     @ruby_version = ruby_version
-    @gems = gems
+    @gems = gems.sort_by { |g| g.name }
   end
 
   def to_nix
@@ -17,39 +17,26 @@ end
 
 __END__
 {
-  <%- if ruby_version && !ruby_version.empty? -%>
-  rubyVersion = "<%= ruby_version %>";
-  <%- end -%>
-  gemset =  {
-    <%- gems.each do |gem| -%>
-    <%= gem.attr_name %> = {
-      name = "<%= gem.drv_name %>";
-
-      src = {
-        type = "<%= gem.source.type %>";
-        url = "<%= gem.source.url %>";
-        <%- if gem.source.type == 'git' -%>
-        rev = "<%= gem.source.revision %>";
-        leaveDotGit = true;
-        <%- end -%>
-        sha256 = "<%= gem.source.sha256 %>";
-      };
-      <%- if gem.dependencies.any? -%>
-      dependencies = [
-        <%= gem.dependencies.map { |dep| %Q{"#{dep.attr_name}"} }.join("\n      ") %>
-      ];
+  <%- gems.each do |gem| -%>
+  <%= gem.attr_name %> = {
+    version = "<%= gem.version %>";
+    src = {
+      type = "<%= gem.source.type %>";
+      <%- if gem.source.type == 'git' -%>
+      url = "<%= gem.source.url %>";
+      rev = "<%= gem.source.revision %>";
+      sha256 = "<%= gem.source.sha256 %>";
+      <%- elsif gem.source.type == 'gem' -%>
+      sha256 = "<%= gem.source.sha256 %>";
+      <%- elsif gem.source.type == 'path' -%>
+      path = <%= gem.source.path %>;
       <%- end -%>
     };
+    <%- if gem.dependencies.any? -%>
+    dependencies = [
+      <%= gem.dependencies.sort.map {|d| d.inspect}.join("\n      ") %>
+    ];
     <%- end -%>
-
-    bundler = {
-      name = "bundler-1.7.1";
-
-      src = {
-        type = "url";
-        url = "https://rubygems.org/downloads/bundler-1.7.1.gem";
-        sha256 = "144yqbmi89gl933rh8dv58bm7ia14s4a098qdi2z0q09ank9n5h2";
-      };
-    };
   };
+  <%- end -%>
 }

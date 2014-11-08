@@ -25,7 +25,7 @@ class Bundix::Prefetcher::Cache
   def set(source)
     components = source.components.dup
     last = components.pop
-    
+
     hash = components.inject(@cache) do |acc, component|
       acc[component] ||= Hash.new
     end

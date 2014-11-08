@@ -12,7 +12,7 @@ module Bundix
       end
 
       def sha256
-        @sha256 or raise
+        @sha256 || "NO SHA256"
       end
 
       def type
@@ -43,12 +43,7 @@ module Bundix
       end
     end
 
-    # The {Url} source is *not* very similar to `Bundler::Source::Rubygems`.
-    # The latter describes a whole repository of gems while the former
-    # is for a single gem. Because {Bundix::Source} is required to provide a
-    # SHA256 checksum, describing the whole repository would mean downloading
-    # all of rubygems.org.
-    class Url < Base
+    class Gem < Base
       attr_reader :url
 
       def initialize(url, sha256 = nil)
@@ -60,11 +55,27 @@ module Bundix
         super + [url]
       end
     end
+
+    class Path < Base
+      attr_reader :path
+
+      def initialize(path)
+        @path = path
+      end
+
+      def components
+        super +  [path]
+      end
+    end
   end
 
   class Dependency
     def initialize(dependency)
       @dependency = dependency
+    end
+
+    def name
+      @dependency.name
     end
 
     def attr_name
@@ -74,12 +85,18 @@ module Bundix
 
   class Gem
     attr_reader :source
+    attr_reader :dependencies
 
-    def initialize(spec, source)
+    def initialize(spec, source, dependencies)
       @spec = spec
       @source = source
+      @dependencies = dependencies
     end
-    
+
+    def name
+      @spec.name
+    end
+
     def attr_name
       Bundix.to_attr_name(@spec.name)
     end
@@ -90,10 +107,6 @@ module Bundix
 
     def version
       @spec.version.to_s
-    end
-
-    def dependencies
-      @spec.dependencies.map { |dep| Dependency.new(dep) }
     end
   end
 end
