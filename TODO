@@ -1,0 +1,3 @@
+* As of (the yet unreleased) bundler 1.8, `bundler package --no-install` will
+  create a Gemfile.lock without installing the gems. Use that instead of hooking
+  into internals.
