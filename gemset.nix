@@ -11,10 +11,12 @@
     ];
   };
   bundler = {
-    version = "1.7.4";
+    version = "1.7.9";
     src = {
-      type = "gem";
-      sha256 = "122k07z60780mr00zfbbw04v9xlw1fhxjsx4g2rbm66hxlnlnh89";
+      type = "git";
+      url = "https://github.com/bundler/bundler.git";
+      rev = "a2343c9eabf5403d8ffcbca4dea33d18a60fc157";
+      sha256 = "1f0isjrn4rwak3q6sbs6v6gqhwln32gv2dbd98r902nkg9i7y5i0";
     };
   };
   thor = {

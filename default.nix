@@ -6,15 +6,6 @@ let
   gemset = loadRubyEnv {
     inherit ruby;
     gemset = ./gemset.nix;
-    fixes = {
-      bundix = attrs: {
-        postBuild = ''
-          substituteInPlace lib/bundix/cli.rb \
-            --replace 'BUNDLER = "bundler"' \
-                      'BUNDLER = "${pkgs.bundler_HEAD}/bin/bundle"'
-        '';
-      };
-    };
   };
 
 in

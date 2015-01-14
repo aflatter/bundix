@@ -9,6 +9,6 @@ Gem::Specification.new do |s|
   s.email       = 'rubycoder@example.com'
   s.files       = Dir["bin/*"] + Dir["lib/**/*.rb"]
   s.bindir      = "bin"
-  s.add_runtime_dependency 'bundler', '~> 1.7.4'
+  s.add_runtime_dependency 'bundler', '~> 1.7.9'
   s.add_runtime_dependency 'thor',    '~> 0.19.1'
 end
