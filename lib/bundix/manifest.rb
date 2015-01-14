@@ -16,13 +16,14 @@ end
 __END__
 {
   <%- gems.each do |gem| -%>
-  <%= gem.attr_name %> = {
+  "<%= gem.inspect %>" = {
     version = "<%= gem.version %>";
     src = {
       type = "<%= gem.source.type %>";
       <%- if gem.source.type == 'git' -%>
       url = "<%= gem.source.url %>";
       rev = "<%= gem.source.revision %>";
+      fetchSubmodules = <%= gem.source.submodules %>;
       sha256 = "<%= gem.source.sha256 %>";
       <%- elsif gem.source.type == 'gem' -%>
       sha256 = "<%= gem.source.sha256 %>";

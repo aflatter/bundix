@@ -31,10 +31,12 @@ module Bundix
     class Git < Base
       attr_reader :url
       attr_reader :revision
+      attr_reader :submodules
 
-      def initialize(url, revision, sha256 = nil)
+      def initialize(url, revision, submodules, sha256 = nil)
         @url = url
         @revision = revision
+        @submodules = submodules
         @sha256 = sha256
       end
 
@@ -77,10 +79,6 @@ module Bundix
     def name
       @dependency.name
     end
-
-    def attr_name
-      Bundix.to_attr_name(@dependency.name)
-    end
   end
 
   class Gem
@@ -95,10 +93,6 @@ module Bundix
 
     def name
       @spec.name
-    end
-
-    def attr_name
-      Bundix.to_attr_name(@spec.name)
     end
 
     def drv_name

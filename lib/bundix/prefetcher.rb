@@ -47,7 +47,7 @@ class Bundix::Prefetcher
       url = File.join(source.remotes.first.to_s, 'downloads', "#{spec.name}-#{spec.version}.gem")
       Bundix::Source::Gem.new(url)
     when Bundler::Source::Git
-      Bundix::Source::Git.new(source.uri, source.revision)
+      Bundix::Source::Git.new(source.uri, source.revision, !!source.submodules)
     when Bundler::Source::Path
       Bundix::Source::Path.new("./#{source.path.to_s}")
     else
@@ -67,7 +67,7 @@ class Bundix::Prefetcher
     when Bundix::Source::Gem
       wrapper.url(source.url)
     when Bundix::Source::Git
-      wrapper.git(source.url, source.revision)
+      wrapper.git(source.url, source.revision, source.submodules)
     end
   end
 

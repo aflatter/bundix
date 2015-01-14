@@ -2,6 +2,13 @@ require 'thor'
 require 'bundix'
 require 'fileutils'
 
+class Bundler::Source::Git
+  def allow_git_ops?
+    # was: @allow_remote || @allow_cached
+    true
+  end
+end
+
 class Bundix::CLI < Thor
   include Thor::Actions
   default_task :expr
@@ -37,13 +44,10 @@ class Bundix::CLI < Thor
     Bundler.settings[:no_install] = true
 
     definition = Bundler::Definition.build(options[:gemfile], options[:lockfile], {})
+    definition.resolve_remotely!
+    specs = definition.resolve
 
-    lockfile = options[:lockfile]
-    gemfile  = options[:gemfile]
-
-    definition = Bundler::Definition.build(options[:gemfile], options[:lockfile], {})
-
-    gems = Bundix::Prefetcher.new(shell).run(definition.resolve, Pathname.new(options[:cachefile]))
+    gems = Bundix::Prefetcher.new(shell).run(specs, Pathname.new(options[:cachefile]))
 
     say("Writing...", :green)
     manifest = Bundix::Manifest.new(gems)

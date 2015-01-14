@@ -1,2 +1,4 @@
 * Make sure .bundle/config isn't modified.
 * Use extconf.rb to make patching paths easier.
+* Bundix cache needs to take into account the flags used to fetch the git repo
+  (e.g. --leave-dotGit, --fetch-submodules)
