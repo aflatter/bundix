@@ -1,3 +1,2 @@
-* As of (the yet unreleased) bundler 1.8, `bundler package --no-install` will
-  create a Gemfile.lock without installing the gems. Use that instead of hooking
-  into internals.
+* Make sure .bundle/config isn't modified.
+* Use extconf.rb to make patching paths easier.

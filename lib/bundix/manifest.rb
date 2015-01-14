@@ -2,10 +2,8 @@ require 'bundix'
 
 class Bundix::Manifest
   attr_reader :gems
-  attr_reader :ruby_version
 
-  def initialize(ruby_version, gems)
-    @ruby_version = ruby_version
+  def initialize(gems)
     @gems = gems.sort_by { |g| g.name }
   end
 
