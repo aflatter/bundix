@@ -18,35 +18,6 @@ module Bundix::Prefetcher::Wrapper
     base32
   end
 
-  # There's an edge case of non-determinism in nix-prefetch-git that needs to
-  # be worked out. See: https://github.com/NixOS/nixpkgs/issues/5777
-  # Ugly work-around:
-  #def git(repo, rev, submodules)
-  #  require 'shellwords'
-
-  #  leave_dot_git = true
-
-  #  src = <<-CODE
-  #  let pkgs = import <nixpkgs> {};
-  #  in pkgs.fetchgit {
-  #    url = "#{repo}";
-  #    rev = "#{rev}";
-  #    sha256 = "0000000000000000000000000000000000000000000000000000";
-
-  #    leaveDotGit = #{leave_dot_git};
-  #    fetchSubmodules = #{submodules};
-  #  }
-  #  CODE
-
-  #  cmd = "nix-build -E #{src.shellescape} 2>&1"
-  #  output = `#{cmd}`
-  #  hash = output[/instead has .([a-z0-9]+)/,1]
-  #  assert_length!(hash, 52)
-  #  assert_format!(hash, /^[a-z0-9]+$/)
-
-  #  hash
-  #end
-
   def url(url)
     hash = exec("nix-prefetch-url #{url}")
 
