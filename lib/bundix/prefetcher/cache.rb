@@ -23,6 +23,8 @@ class Bundix::Prefetcher::Cache
   end
 
   def set(source)
+    return unless source.sha256
+
     components = source.components.dup
     last = components.pop
 

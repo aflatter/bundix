@@ -33,7 +33,7 @@ class Bundix::CLI < Thor
   desc 'expr', 'Creates a Nix expression for your project'
   option :gemfile, type: :string, default: 'Gemfile',
                    desc: "Path to the project's Gemfile"
-  option :lockfile, type: :string, default: 'Gemfile.lock',
+  option :lockfile, type: :string,
                     desc: "Path to the project's Gemfile.lock"
   option :cachefile, type: :string, default: "#{ENV['HOME']}/.bundix/cache"
   option :target, type: :string, default: 'gemset.nix',
@@ -50,7 +50,7 @@ class Bundix::CLI < Thor
     gems = Bundix::Prefetcher.new(shell).run(specs, Pathname.new(options[:cachefile]))
 
     say("Writing...", :green)
-    manifest = Bundix::Manifest.new(gems)
+    manifest = Bundix::Manifest.new(gems, options[:gemfile], options[:target])
     create_file(@options[:target], manifest.to_nix, force: true)
   end
 

@@ -49,7 +49,7 @@ class Bundix::Prefetcher
     when Bundler::Source::Git
       Bundix::Source::Git.new(source.uri, source.revision, !!source.submodules)
     when Bundler::Source::Path
-      Bundix::Source::Path.new("./#{source.path.to_s}")
+      Bundix::Source::Path.new(source.path.to_s)
     else
       fail "Unhandled source type: #{source.class}"
     end

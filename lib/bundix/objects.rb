@@ -12,7 +12,7 @@ module Bundix
       end
 
       def sha256
-        @sha256 || "NO SHA256"
+        @sha256 ||= nil
       end
 
       def type
@@ -41,7 +41,11 @@ module Bundix
       end
 
       def components
-        super +  [url, revision]
+        super + [{
+          "url" => url,
+          "revision" => revision,
+          "submodules" => submodules
+        }]
       end
     end
 
@@ -63,10 +67,6 @@ module Bundix
 
       def initialize(path)
         @path = path
-      end
-
-      def components
-        super +  [path]
       end
     end
   end

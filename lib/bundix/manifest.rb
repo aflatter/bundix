@@ -1,10 +1,21 @@
 require 'bundix'
+require 'pathname'
 
 class Bundix::Manifest
   attr_reader :gems
 
-  def initialize(gems)
+  def initialize(gems, gemfile, target)
+    @gemfile = Pathname.new(gemfile).expand_path
+    @target = Pathname.new(target).expand_path
     @gems = gems.sort_by { |g| g.name }
+  end
+
+  def relative_path(path)
+    path = Pathname.new(path)
+    path = @gemfile.dirname + path if path.relative?
+    path = path.relative_path_from(@target.dirname)
+
+    "./#{path.to_s}"
   end
 
   def to_nix
@@ -16,7 +27,7 @@ end
 __END__
 {
   <%- gems.each do |gem| -%>
-  "<%= gem.inspect %>" = {
+  <%= gem.name.inspect %> = {
     version = "<%= gem.version %>";
     src = {
       type = "<%= gem.source.type %>";
@@ -28,7 +39,7 @@ __END__
       <%- elsif gem.source.type == 'gem' -%>
       sha256 = "<%= gem.source.sha256 %>";
       <%- elsif gem.source.type == 'path' -%>
-      path = <%= gem.source.path %>;
+      path = <%= relative_path(gem.source.path) %>;
       <%- end -%>
     };
     <%- if gem.dependencies.any? -%>
