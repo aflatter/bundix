@@ -29,7 +29,7 @@ __END__
   <%- gems.each do |gem| -%>
   <%= gem.name.inspect %> = {
     version = "<%= gem.version %>";
-    src = {
+    source = {
       type = "<%= gem.source.type %>";
       <%- if gem.source.type == 'git' -%>
       url = "<%= gem.source.url %>";

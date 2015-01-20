@@ -2,13 +2,6 @@ require 'thor'
 require 'bundix'
 require 'fileutils'
 
-class Bundler::Source::Git
-  def allow_git_ops?
-    # was: @allow_remote || @allow_cached
-    true
-  end
-end
-
 class Bundix::CLI < Thor
   include Thor::Actions
   default_task :expr
@@ -31,9 +24,7 @@ class Bundix::CLI < Thor
   end
 
   desc 'expr', 'Creates a Nix expression for your project'
-  option :gemfile, type: :string, default: 'Gemfile',
-                   desc: "Path to the project's Gemfile"
-  option :lockfile, type: :string,
+  option :lockfile, type: :string, default: 'Gemfile.lock',
                     desc: "Path to the project's Gemfile.lock"
   option :cachefile, type: :string, default: "#{ENV['HOME']}/.bundix/cache"
   option :target, type: :string, default: 'gemset.nix',
@@ -41,11 +32,9 @@ class Bundix::CLI < Thor
   def expr
     require 'bundix/prefetcher'
     require 'bundix/manifest'
-    Bundler.settings[:no_install] = true
 
-    definition = Bundler::Definition.build(options[:gemfile], options[:lockfile], {})
-    definition.resolve_remotely!
-    specs = definition.resolve
+    lockfile = Bundler::LockfileParser.new(Bundler.read_file(options[:lockfile]))
+    specs = lockfile.specs
 
     gems = Bundix::Prefetcher.new(shell).run(specs, Pathname.new(options[:cachefile]))
 
