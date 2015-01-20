@@ -39,7 +39,7 @@ class Bundix::CLI < Thor
     gems = Bundix::Prefetcher.new(shell).run(specs, Pathname.new(options[:cachefile]))
 
     say("Writing...", :green)
-    manifest = Bundix::Manifest.new(gems, options[:gemfile], options[:target])
+    manifest = Bundix::Manifest.new(gems, options[:lockfile], options[:target])
     create_file(@options[:target], manifest.to_nix, force: true)
   end
 

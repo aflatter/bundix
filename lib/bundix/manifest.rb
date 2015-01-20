@@ -4,15 +4,15 @@ require 'pathname'
 class Bundix::Manifest
   attr_reader :gems
 
-  def initialize(gems, gemfile, target)
-    @gemfile = Pathname.new(gemfile).expand_path
+  def initialize(gems, lockfile, target)
+    @lockfile = Pathname.new(lockfile).expand_path
     @target = Pathname.new(target).expand_path
     @gems = gems.sort_by { |g| g.name }
   end
 
   def relative_path(path)
     path = Pathname.new(path)
-    path = @gemfile.dirname + path if path.relative?
+    path = @lockfile.dirname + path if path.relative?
     path = path.relative_path_from(@target.dirname)
 
     "./#{path.to_s}"
