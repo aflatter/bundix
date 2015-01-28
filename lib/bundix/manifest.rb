@@ -34,12 +34,13 @@ __END__
       <%- if gem.source.type == 'git' -%>
       url = "<%= gem.source.url %>";
       rev = "<%= gem.source.revision %>";
-      fetchSubmodules = <%= gem.source.submodules %>;
       sha256 = "<%= gem.source.sha256 %>";
+      fetchSubmodules = <%= gem.source.submodules %>;
       <%- elsif gem.source.type == 'gem' -%>
       sha256 = "<%= gem.source.sha256 %>";
       <%- elsif gem.source.type == 'path' -%>
       path = <%= relative_path(gem.source.path) %>;
+      pathString = <%= gem.source.path.inspect %>;
       <%- end -%>
     };
     <%- if gem.dependencies.any? -%>

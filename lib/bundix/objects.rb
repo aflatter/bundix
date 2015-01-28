@@ -64,6 +64,7 @@ module Bundix
 
     class Path < Base
       attr_reader :path
+      attr_reader :original_path
 
       def initialize(path)
         @path = path
